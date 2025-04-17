@@ -5,9 +5,10 @@ interface DialogProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  position?: 'center' | 'right';
 }
 
-export function Dialog({ isOpen, onClose, title, children }: DialogProps) {
+export function Dialog({ isOpen, onClose, title, children, position = 'center' }: DialogProps) {
   if (!isOpen) return null;
 
   // Close dialog when clicking escape key
@@ -23,13 +24,22 @@ export function Dialog({ isOpen, onClose, title, children }: DialogProps) {
     };
   }, [onClose]);
 
+  // Animation classes based on position
+  const containerClasses = position === 'right' 
+    ? "fixed inset-0 z-50 bg-black/60 flex justify-end"
+    : "fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 sm:p-8";
+
+  const dialogClasses = position === 'right'
+    ? "bg-white dark:bg-zinc-800 shadow-xl w-full max-w-sm h-full animate-slide-in-right"
+    : "bg-white dark:bg-zinc-800 rounded-xl shadow-xl w-full max-w-4xl overflow-hidden animate-fade-in";
+
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 sm:p-8"
+      className={containerClasses}
       onClick={onClose}
     >
       <div 
-        className="bg-white dark:bg-zinc-800 rounded-xl shadow-xl w-full max-w-4xl overflow-hidden"
+        className={dialogClasses}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-700 p-5">
@@ -46,7 +56,11 @@ export function Dialog({ isOpen, onClose, title, children }: DialogProps) {
             <span className="sr-only">Close</span>
           </button>
         </div>
-        <div className="p-6 overflow-y-auto max-h-[calc(85vh-8rem)] lg:max-h-[calc(90vh-8rem)]">
+        <div className={
+          position === 'right'
+          ? "p-6 overflow-y-auto flex-1"
+          : "p-6 overflow-y-auto max-h-[calc(85vh-8rem)] lg:max-h-[calc(90vh-8rem)]"
+        }>
           {children}
         </div>
       </div>
