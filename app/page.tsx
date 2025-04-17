@@ -1,101 +1,139 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import Sidebar from "./components/sidebar";
+import RenovationItemCard from "./components/renovation-item-card";
+import { properties, renovationItems, Property, RenovationStatus } from "./data/mock-data";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [selectedProperty, setSelectedProperty] = useState<Property>(properties[0]);
+  const [statusFilter, setStatusFilter] = useState<RenovationStatus | 'all'>('all');
+  
+  // Filter renovation items by property and status
+  const propertyItems = renovationItems.filter(
+    (item) => item.propertyId === selectedProperty.id && 
+              (statusFilter === 'all' || item.status === statusFilter)
+  );
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="flex min-h-screen bg-zinc-100 dark:bg-zinc-950">
+      {/* Sidebar for Property Selection */}
+      <Sidebar
+        properties={properties}
+        selectedProperty={selectedProperty}
+        onSelectProperty={setSelectedProperty}
+      />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Header */}
+        <header className="bg-white dark:bg-zinc-800 shadow-sm border-b border-zinc-200 dark:border-zinc-700 p-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Real Estate Renovation Tracker</h1>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="font-medium">{selectedProperty.name}</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  {selectedProperty.address}
+                </p>
+              </div>
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white dark:border-zinc-700 shadow-sm">
+                <Image
+                  src={selectedProperty.image}
+                  alt={selectedProperty.name}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-6">
+          {/* Renovation Summary */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-indigo-700 dark:text-indigo-400">Renovation Items</h2>
+            <div className="flex gap-2 items-center">
+              <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                {propertyItems.length} items
+              </span>
+            </div>
+          </div>
+
+          {/* Status Filters */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button 
+              onClick={() => setStatusFilter('all')} 
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === 'all' 
+                  ? "bg-slate-200 dark:bg-slate-800" 
+                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+              }`}
+            >
+              All
+            </button>
+            <button 
+              onClick={() => setStatusFilter('in-progress')} 
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === 'in-progress' 
+                  ? "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200" 
+                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+              }`}
+            >
+              In Progress
+            </button>
+            <button 
+              onClick={() => setStatusFilter('not-started')} 
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === 'not-started' 
+                  ? "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200" 
+                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+              }`}
+            >
+              Not Started
+            </button>
+            <button 
+              onClick={() => setStatusFilter('done')} 
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === 'done' 
+                  ? "bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200" 
+                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+              }`}
+            >
+              Completed
+            </button>
+            <button 
+              onClick={() => setStatusFilter('overdue')} 
+              className={`px-4 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === 'overdue' 
+                  ? "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200" 
+                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+              }`}
+            >
+              Overdue
+            </button>
+          </div>
+
+          {/* Renovation Items Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {propertyItems.map((item) => (
+              <RenovationItemCard key={item.id} item={item} />
+            ))}
+            
+            {propertyItems.length === 0 && (
+              <div className="col-span-full flex items-center justify-center py-12 text-slate-500 dark:text-slate-400">
+                <div className="text-center">
+                  <p className="text-lg">No renovation items match the current filter</p>
+                  <p className="mt-1">Try selecting a different status filter or property</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
