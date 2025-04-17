@@ -34,6 +34,7 @@ export interface Note {
   date: string;
   content: string;
   author: string;
+  images?: string[];
 }
 
 // Sample Properties
