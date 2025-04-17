@@ -2,7 +2,7 @@ import { RenovationItem, RenovationStatus, properties } from "../data/mock-data"
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Dialog } from "./ui/dialog";
-import Image from "next/image";
+
 
 interface RenovationItemCardProps {
   item: RenovationItem;
