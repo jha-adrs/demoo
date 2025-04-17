@@ -146,6 +146,25 @@ const noteTemplates = [
   "Weather delays have pushed us back a bit, but we're still aiming to finish on time."
 ];
 
+// Sample renovation images for notes
+const renovationImages = [
+  "https://images.unsplash.com/photo-1523413363574-c30aa976f9c1?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1505798577917-a65157d3320a?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1517581177682-a085bb7ffb15?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1556912173-3bb406ef7e97?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1558346547-4439467bd1d5?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1621155346337-1d19476ba7d6?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1564540583246-934409427276?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1618762044398-ec1e7e048bbd?w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800&auto=format&fit=crop"
+];
+
 // Generate random renovation items
 const generateRenovationItems = (): RenovationItem[] => {
   const items: RenovationItem[] = [];
@@ -175,11 +194,26 @@ const generateRenovationItems = (): RenovationItem[] => {
         const noteDate = new Date(startDate);
         noteDate.setDate(startDate.getDate() + Math.floor(Math.random() * durationDays));
         
+        // Decide randomly whether to add images to this note (70% chance)
+        const hasImages = Math.random() < 0.7;
+        // If including images, add 1-3 random images
+        let images: string[] | undefined = undefined;
+        if (hasImages) {
+          const imageCount = Math.floor(Math.random() * 3) + 1; // 1-3 images
+          images = [];
+          // Select random unique images from the pool
+          const shuffledImages = [...renovationImages].sort(() => 0.5 - Math.random());
+          for (let k = 0; k < Math.min(imageCount, shuffledImages.length); k++) {
+            images.push(shuffledImages[k]);
+          }
+        }
+        
         notes.push({
           id: `note-${property.id}-${i}-${j}`,
           date: noteDate.toISOString().split('T')[0],
           content: noteTemplates[Math.floor(Math.random() * noteTemplates.length)],
-          author: contractor.name
+          author: contractor.name,
+          images
         });
       }
       
