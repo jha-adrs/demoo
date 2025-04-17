@@ -69,8 +69,8 @@ export default function Home() {
               onClick={() => setStatusFilter('all')} 
               className={`px-4 py-1 rounded-full text-sm transition-colors ${
                 statusFilter === 'all' 
-                  ? "bg-slate-200 dark:bg-slate-800" 
-                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                  ? "bg-zinc-200 dark:bg-zinc-800 border border-indigo-300 dark:border-indigo-700" 
+                  : "hover:bg-zinc-200 dark:hover:bg-zinc-800"
               }`}
             >
               All
@@ -79,8 +79,8 @@ export default function Home() {
               onClick={() => setStatusFilter('in-progress')} 
               className={`px-4 py-1 rounded-full text-sm transition-colors ${
                 statusFilter === 'in-progress' 
-                  ? "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200" 
-                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                  ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 border border-indigo-300 dark:border-indigo-700" 
+                  : "hover:bg-zinc-200 dark:hover:bg-zinc-800"
               }`}
             >
               In Progress
@@ -89,8 +89,8 @@ export default function Home() {
               onClick={() => setStatusFilter('not-started')} 
               className={`px-4 py-1 rounded-full text-sm transition-colors ${
                 statusFilter === 'not-started' 
-                  ? "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200" 
-                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                  ? "bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200 border border-indigo-300 dark:border-indigo-700" 
+                  : "hover:bg-zinc-200 dark:hover:bg-zinc-800"
               }`}
             >
               Not Started
@@ -99,8 +99,8 @@ export default function Home() {
               onClick={() => setStatusFilter('done')} 
               className={`px-4 py-1 rounded-full text-sm transition-colors ${
                 statusFilter === 'done' 
-                  ? "bg-green-200 text-green-800 dark:bg-green-900 dark:text-green-200" 
-                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                  ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border border-indigo-300 dark:border-indigo-700" 
+                  : "hover:bg-zinc-200 dark:hover:bg-zinc-800"
               }`}
             >
               Completed
@@ -109,8 +109,8 @@ export default function Home() {
               onClick={() => setStatusFilter('overdue')} 
               className={`px-4 py-1 rounded-full text-sm transition-colors ${
                 statusFilter === 'overdue' 
-                  ? "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200" 
-                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                  ? "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200 border border-indigo-300 dark:border-indigo-700" 
+                  : "hover:bg-zinc-200 dark:hover:bg-zinc-800"
               }`}
             >
               Overdue
@@ -124,7 +124,7 @@ export default function Home() {
             ))}
             
             {propertyItems.length === 0 && (
-              <div className="col-span-full flex items-center justify-center py-12 text-slate-500 dark:text-slate-400">
+              <div className="col-span-full flex items-center justify-center py-12 text-zinc-500 dark:text-zinc-400">
                 <div className="text-center">
                   <p className="text-lg">No renovation items match the current filter</p>
                   <p className="mt-1">Try selecting a different status filter or property</p>
