@@ -10,17 +10,34 @@ interface DialogProps {
 export function Dialog({ isOpen, onClose, title, children }: DialogProps) {
   if (!isOpen) return null;
 
+  // Close dialog when clicking escape key
+  React.useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 sm:p-8"
+      onClick={onClose}
+    >
       <div 
-        className="bg-white dark:bg-slate-800 rounded-lg shadow-lg w-full max-w-md overflow-hidden"
+        className="bg-white dark:bg-zinc-800 rounded-xl shadow-xl w-full max-w-4xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 p-4">
-          <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-700 p-5">
+          <h2 className="text-xl font-semibold text-indigo-700 dark:text-indigo-400">{title}</h2>
           <button 
             onClick={onClose} 
-            className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+            className="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+            aria-label="Close"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -29,7 +46,7 @@ export function Dialog({ isOpen, onClose, title, children }: DialogProps) {
             <span className="sr-only">Close</span>
           </button>
         </div>
-        <div className="p-4 overflow-y-auto max-h-[calc(80vh-8rem)]">
+        <div className="p-6 overflow-y-auto max-h-[calc(85vh-8rem)] lg:max-h-[calc(90vh-8rem)]">
           {children}
         </div>
       </div>
